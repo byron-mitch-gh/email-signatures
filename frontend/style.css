@@ -381,6 +381,7 @@ select option {
     text-align: left;
     max-height: 90vh;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .gmail-modal-header {
@@ -425,7 +426,8 @@ select option {
     border-radius: 8px;
     padding: 20px 24px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    overflow: hidden;
+    overflow-x: auto;
+    min-width: min-content;
 }
 
 .gmail-copy-section {
@@ -515,6 +517,7 @@ select option {
     justify-content: center;
     gap: 8px;
     width: 100%;
+    box-sizing: border-box;
     padding: 15px 24px;
     background: rgba(99, 133, 255, 0.18);
     color: var(--primary-light);
@@ -526,7 +529,7 @@ select option {
     text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
-    border-radius: 0 0 16px 16px;
+    border-radius: 0;
     transition: background 0.2s, color 0.2s;
 }
 
