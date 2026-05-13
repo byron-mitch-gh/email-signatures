@@ -58,6 +58,7 @@ function attachListeners() {
     document.getElementById('useUrlToggle').addEventListener('click', togglePhotoMode);
     document.getElementById('photoUrlInput').addEventListener('input', handlePhotoUrlInput);
     document.getElementById('copyBtn').addEventListener('click', copyHtml);
+    document.getElementById('addGmailBtn').addEventListener('click', openGmailModal);
 }
 
 // ── Photo handling ────────────────────────────────────────────────────────────
@@ -219,6 +220,7 @@ function updatePreview() {
     document.getElementById('previewPlaceholder').classList.add('hidden');
     document.getElementById('previewFrame').innerHTML = html;
     document.getElementById('copyBtn').disabled = false;
+    document.getElementById('addGmailBtn').disabled = false;
 }
 
 function renderTemplate(template, data) {
@@ -231,6 +233,7 @@ function showPreviewPlaceholder() {
     document.getElementById('previewPlaceholder').classList.remove('hidden');
     document.getElementById('previewFrame').innerHTML = '';
     document.getElementById('copyBtn').disabled = true;
+    document.getElementById('addGmailBtn').disabled = true;
     renderedHtml = null;
 }
 
@@ -280,9 +283,57 @@ async function copyHtml() {
         await navigator.clipboard.writeText(renderedHtml);
         const btn = document.getElementById('copyBtn');
         btn.textContent = 'Copied!';
-        setTimeout(() => { btn.textContent = 'Copy Signature'; }, 2000);
+        setTimeout(() => { btn.textContent = 'Copy HTML'; }, 2000);
     } catch {
         showToast('Could not copy to clipboard — try a different browser.');
+    }
+}
+
+// ── Gmail modal ───────────────────────────────────────────────────────────────
+
+function openGmailModal() {
+    if (!renderedHtml) return;
+    document.getElementById('gmailSignaturePreview').innerHTML = renderedHtml;
+    document.getElementById('gmailModal').classList.remove('hidden');
+}
+
+function closeGmailModal() {
+    document.getElementById('gmailModal').classList.add('hidden');
+    document.getElementById('gmailSignaturePreview').innerHTML = '';
+    const btn = document.getElementById('copyForGmailBtn');
+    btn.textContent = 'Copy Signature';
+}
+
+async function copyForGmail() {
+    if (!renderedHtml) return;
+    const btn = document.getElementById('copyForGmailBtn');
+    try {
+        await navigator.clipboard.write([
+            new ClipboardItem({ 'text/html': new Blob([renderedHtml], { type: 'text/html' }) })
+        ]);
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = 'Copy Signature'; }, 2000);
+    } catch {
+        // execCommand fallback for browsers without ClipboardItem support
+        const el = document.createElement('div');
+        el.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
+        el.contentEditable = 'true';
+        el.innerHTML = renderedHtml;
+        document.body.appendChild(el);
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        const ok = document.execCommand('copy');
+        sel.removeAllRanges();
+        document.body.removeChild(el);
+        if (ok) {
+            btn.textContent = 'Copied!';
+            setTimeout(() => { btn.textContent = 'Copy Signature'; }, 2000);
+        } else {
+            showToast('Could not copy — try a different browser.');
+        }
     }
 }
 

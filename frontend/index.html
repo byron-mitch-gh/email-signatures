@@ -120,11 +120,42 @@
                 </div>
                 <div class="preview-frame" id="previewFrame"></div>
             </div>
-            <p class="copy-note" id="copyNote">Paste into Gmail under <strong>Settings → General → Signature</strong></p>
-            <button class="copy-btn-primary" id="copyBtn" disabled>Copy Signature</button>
+            <div class="preview-footer-actions">
+                <button class="footer-copy-html-btn" id="copyBtn" disabled>Copy HTML</button>
+                <button class="footer-add-gmail-btn" id="addGmailBtn" disabled>Add to Gmail</button>
+            </div>
         </div>
 
     </main>
+
+    <!-- GMAIL MODAL -->
+    <div class="modal-overlay hidden" id="gmailModal">
+        <div class="modal gmail-modal">
+            <div class="gmail-modal-header">
+                <h2>Add to Gmail</h2>
+                <button class="modal-close" onclick="closeGmailModal()" aria-label="Close">&times;</button>
+            </div>
+            <div class="gmail-signature-preview" id="gmailSignaturePreview"></div>
+            <div class="gmail-copy-section">
+                <button class="gmail-copy-btn" id="copyForGmailBtn" onclick="copyForGmail()">Copy Signature</button>
+                <span class="gmail-copy-hint">Copies as rich text — paste directly into Gmail</span>
+            </div>
+            <div class="gmail-instructions">
+                <h3 class="section-title">How to add to Gmail</h3>
+                <ol>
+                    <li><span>Click <strong>Copy Signature</strong> above</span></li>
+                    <li><span>Click <strong>Open Gmail Settings</strong> below — it opens in a new tab</span></li>
+                    <li><span>Scroll down to <strong>Signature</strong> and click <strong>Create new</strong> or select an existing one</span></li>
+                    <li><span>Click inside the signature editor and paste <strong>(Ctrl+V / ⌘+V)</strong></span></li>
+                    <li><span>Scroll to the bottom of the page and click <strong>Save Changes</strong></span></li>
+                </ol>
+            </div>
+            <a class="gmail-open-btn" href="https://mail.google.com/mail/u/0/#settings/general" target="_blank" rel="noopener">
+                Open Gmail Settings
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+        </div>
+    </div>
 
     <!-- CROP MODAL -->
     <div class="modal-overlay hidden" id="cropModal">
