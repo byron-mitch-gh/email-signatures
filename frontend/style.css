@@ -375,8 +375,8 @@ select option {
 
 /* ── Gmail modal ───────────────────────────────── */
 .gmail-modal {
-    max-width: 600px;
-    width: 92vw;
+    max-width: 760px;
+    width: 96vw;
     padding: 0;
     text-align: left;
     max-height: 90vh;
@@ -426,8 +426,12 @@ select option {
     border-radius: 8px;
     padding: 20px 24px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    overflow-x: auto;
-    min-width: min-content;
+    overflow: hidden;
+}
+
+.gmail-signature-scaler {
+    transform-origin: top left;
+    display: block;
 }
 
 .gmail-copy-section {

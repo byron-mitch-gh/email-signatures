@@ -294,8 +294,22 @@ async function copyHtml() {
 function openGmailModal() {
     if (!renderedHtml) return;
     document.getElementById('gmailSignaturePreview').innerHTML =
-        `<div class="gmail-signature-box">${renderedHtml}</div>`;
+        `<div class="gmail-signature-box"><div class="gmail-signature-scaler">${renderedHtml}</div></div>`;
     document.getElementById('gmailModal').classList.remove('hidden');
+    requestAnimationFrame(fitSignaturePreview);
+}
+
+function fitSignaturePreview() {
+    const box = document.querySelector('.gmail-signature-box');
+    const scaler = document.querySelector('.gmail-signature-scaler');
+    if (!box || !scaler) return;
+    const available = box.clientWidth - 48; // subtract 24px padding each side
+    const natural = scaler.scrollWidth;
+    if (natural > 0) {
+        const scale = Math.min(1, available / natural);
+        scaler.style.transform = `scale(${scale})`;
+        box.style.height = `${scaler.offsetHeight * scale + 40}px`;
+    }
 }
 
 function closeGmailModal() {
