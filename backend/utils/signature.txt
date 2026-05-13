@@ -11,7 +11,7 @@
                                     style="margin-right: 20px; display: block;"><img
                                         src={{ profilePhotoSrc }}
                                         role="presentation" width="130" class="sc-cHGsZl bHiaRe"
-                                        style="max-width: 130px; aspect ratio: 1;"></span></td>
+                                        style="max-width: 130px; aspect-ratio: 1; border-radius: 50%; display: block;"></span></td>
                             <td style="vertical-align: middle;">
                                 <h3 color="#000000" class="sc-fBuWsC eeihxG"
                                     style="margin: 0px; font-size: 18px; color: rgb(0, 0, 0);">
@@ -147,12 +147,10 @@
                                     <tbody>
                                         <tr style="text-align: right;">
                                             <td><a href="https://www.linkedin.com/company/spatialedge"
-                                                    color="#00b7f0" class="sc-hzDkRC kpsoyz"
                                                     style="display: inline-block; padding: 0px; background-color: transparent;"><img
-                                                        src="https://cdn2.hubspot.net/hubfs/53/tools/email-signature-generator/icons/linkedin-icon-2x.png"
-                                                        alt="linkedin" color="#00b7f0" height="24"
-                                                        class="sc-bRBYWo ccSRck"
-                                                        style="background-color: transparent; max-width: 135px; display: block;"></a>
+                                                        src="{{ imageBase }}/images/linkedin-logo.png"
+                                                        alt="LinkedIn" height="24"
+                                                        style="background-color: transparent; display: block;"></a>
                                             </td>
                                             <td width="5">
                                                 <div></div>

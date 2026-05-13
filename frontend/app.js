@@ -293,7 +293,8 @@ async function copyHtml() {
 
 function openGmailModal() {
     if (!renderedHtml) return;
-    document.getElementById('gmailSignaturePreview').innerHTML = renderedHtml;
+    document.getElementById('gmailSignaturePreview').innerHTML =
+        `<div class="gmail-signature-box">${renderedHtml}</div>`;
     document.getElementById('gmailModal').classList.remove('hidden');
 }
 
