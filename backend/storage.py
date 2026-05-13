@@ -1,31 +1,29 @@
-import base64
-import json
 import os
 import uuid
 
-from google.cloud import storage as gcs
+import boto3
+from botocore.client import Config
 
 
-def _client() -> gcs.Client:
-    raw = os.environ.get("GOOGLE_CREDENTIALS_JSON")
-    if raw:
-        try:
-            decoded = base64.b64decode(raw).decode()
-        except Exception:
-            decoded = raw
-        info = json.loads(decoded)
-        from google.oauth2.service_account import Credentials
-        creds = Credentials.from_service_account_info(
-            info, scopes=["https://www.googleapis.com/auth/cloud-platform"]
-        )
-        return gcs.Client(credentials=creds, project=info.get("project_id"))
-    return gcs.Client()
+def _client():
+    return boto3.client(
+        "s3",
+        endpoint_url=os.environ["S3_ENDPOINT_URL"],
+        aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
+        aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
+        region_name=os.environ.get("AWS_REGION", "auto"),
+        config=Config(signature_version="s3v4"),
+    )
 
 
 def upload(content: bytes, content_type: str) -> str:
-    bucket_name = os.environ["GCS_BUCKET_NAME"]
-    bucket = _client().bucket(bucket_name)
-    blob = bucket.blob(f"profile-photos/{uuid.uuid4()}")
-    blob.upload_from_string(content, content_type=content_type)
-    blob.make_public()
-    return blob.public_url
+    bucket = os.environ["S3_BUCKET_NAME"]
+    key = f"profile-photos/{uuid.uuid4()}"
+    _client().put_object(
+        Bucket=bucket,
+        Key=key,
+        Body=content,
+        ContentType=content_type,
+    )
+    endpoint = os.environ["S3_ENDPOINT_URL"].rstrip("/")
+    return f"{endpoint}/{bucket}/{key}"
