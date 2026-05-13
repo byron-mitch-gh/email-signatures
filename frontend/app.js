@@ -11,6 +11,7 @@ let photoUrl = null;
 let renderedHtml = null;
 let isSubmitting = false;
 let toastTimer = null;
+let cropperInstance = null;
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
 
@@ -97,7 +98,7 @@ function handlePhotoUrlInput() {
     updatePreview();
 }
 
-async function handlePhotoSelect(file) {
+function handlePhotoSelect(file) {
     if (!file.type.startsWith('image/')) {
         showFieldError('photo', 'Please select an image file.');
         return;
@@ -107,37 +108,83 @@ async function handlePhotoSelect(file) {
         return;
     }
     clearFieldError('photo');
+    openCropModal(file);
+}
 
-    // Show local blob preview immediately so the user gets instant feedback
-    const reader = new FileReader();
-    reader.onload = e => {
-        document.getElementById('photoPlaceholder').classList.add('hidden');
-        const img = document.getElementById('photoImg');
-        img.src = e.target.result;
-        img.classList.remove('hidden');
+// ── Crop modal ────────────────────────────────────────────────────────────────
+
+function openCropModal(file) {
+    const cropImg = document.getElementById('cropImage');
+    if (cropImg.src.startsWith('blob:')) URL.revokeObjectURL(cropImg.src);
+
+    cropImg.src = URL.createObjectURL(file);
+    cropImg.onload = () => {
+        if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
+        cropperInstance = new Cropper(cropImg, {
+            aspectRatio: 1,
+            viewMode: 1,
+            dragMode: 'move',
+            autoCropArea: 0.9,
+            guides: false,
+            center: false,
+            highlight: false,
+            background: false,
+            toggleDragModeOnDblclick: false,
+        });
     };
-    reader.readAsDataURL(file);
+    document.getElementById('cropModal').classList.remove('hidden');
+}
 
-    setPhotoStatus('uploading', 'Uploading…');
+function confirmCrop() {
+    if (!cropperInstance) return;
 
-    const formData = new FormData();
-    formData.append('file', file);
+    document.getElementById('cropBtnText').classList.add('hidden');
+    document.getElementById('cropBtnSpinner').classList.remove('hidden');
 
-    try {
-        const res = await fetch(`${API_BASE}/api/photos`, { method: 'POST', body: formData });
-        if (!res.ok) {
-            const err = await res.json().catch(() => ({}));
-            throw new Error(err.detail || 'Upload failed');
+    const canvas = cropperInstance.getCroppedCanvas({ width: 500, height: 500, imageSmoothingQuality: 'high' });
+
+    canvas.toBlob(async (blob) => {
+        // Update form panel preview instantly
+        document.getElementById('photoPlaceholder').classList.add('hidden');
+        const previewImg = document.getElementById('photoImg');
+        previewImg.src = canvas.toDataURL('image/jpeg', 0.9);
+        previewImg.classList.remove('hidden');
+
+        closeCropModal();
+        setPhotoStatus('uploading', 'Uploading…');
+
+        const formData = new FormData();
+        formData.append('file', blob, 'photo.jpg');
+
+        try {
+            const res = await fetch(`${API_BASE}/api/photos`, { method: 'POST', body: formData });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.detail || 'Upload failed');
+            }
+            const { url } = await res.json();
+            photoUrl = url;
+            setPhotoStatus('success', '✓ Photo uploaded');
+            updatePreview();
+        } catch (err) {
+            setPhotoStatus('error', `✗ ${err.message}`);
+            showFieldError('photo', err.message);
+            photoUrl = null;
         }
-        const { url } = await res.json();
-        photoUrl = url;
-        setPhotoStatus('success', '✓ Photo uploaded');
-        updatePreview();
-    } catch (err) {
-        setPhotoStatus('error', `✗ ${err.message}`);
-        showFieldError('photo', err.message);
-        photoUrl = null;
-    }
+    }, 'image/jpeg', 0.9);
+}
+
+function cancelCrop() {
+    closeCropModal();
+}
+
+function closeCropModal() {
+    document.getElementById('cropModal').classList.add('hidden');
+    document.getElementById('cropBtnText').classList.remove('hidden');
+    document.getElementById('cropBtnSpinner').classList.add('hidden');
+    if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
+    const cropImg = document.getElementById('cropImage');
+    if (cropImg.src.startsWith('blob:')) { URL.revokeObjectURL(cropImg.src); cropImg.src = ''; }
 }
 
 function setPhotoStatus(cls, text) {

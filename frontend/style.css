@@ -548,6 +548,98 @@ select option {
         0 0 36px rgba(99, 133, 255, 0.4);
 }
 
+/* ── Crop modal ────────────────────────────────── */
+.crop-modal {
+    max-width: 540px;
+    width: 92vw;
+    padding: 28px 28px 24px;
+    text-align: left;
+}
+
+.crop-modal h2 {
+    margin-bottom: 4px;
+}
+
+.crop-hint {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 16px !important;
+}
+
+.crop-container {
+    width: 100%;
+    max-height: 400px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #000;
+}
+
+.crop-container img {
+    display: block;
+    max-width: 100%;
+}
+
+.crop-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    justify-content: flex-end;
+}
+
+.modal-btn-cancel {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    font-size: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.modal-btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text);
+}
+
+.crop-confirm-btn {
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+}
+
+/* Cropper.js overrides — match brand colours */
+.cropper-view-box,
+.cropper-face {
+    outline: 1px solid var(--primary);
+}
+
+.cropper-view-box {
+    outline-color: var(--primary);
+}
+
+.cropper-line {
+    background-color: var(--primary);
+    opacity: 0.6;
+}
+
+.cropper-point {
+    background-color: var(--primary);
+    width: 8px;
+    height: 8px;
+    opacity: 1;
+}
+
+.cropper-dashed {
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
 /* ── Toast ─────────────────────────────────────── */
 .toast {
     position: fixed;
