@@ -1,3 +1,4 @@
+import io
 import os
 from pathlib import Path
 
@@ -5,6 +6,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from PIL import Image
 from pybars import Compiler
 from pydantic import BaseModel
 
@@ -26,6 +28,18 @@ app.add_middleware(
 UTILS_DIR = Path(__file__).parent / "utils"
 FRONTEND_DIR = Path(__file__).parent / "frontend"
 _compiler = Compiler()
+
+
+def _crop_square(data: bytes, size: int = 500) -> bytes:
+    img = Image.open(io.BytesIO(data)).convert("RGB")
+    w, h = img.size
+    side = min(w, h)
+    left = (w - side) // 2
+    top = (h - side) // 2
+    img = img.crop((left, top, left + side, top + side)).resize((size, size), Image.LANCZOS)
+    buf = io.BytesIO()
+    img.save(buf, format="JPEG", quality=90)
+    return buf.getvalue()
 
 
 def _render(sig_data: dict) -> str:
@@ -59,7 +73,8 @@ async def upload_photo(file: UploadFile = File(...)):
     content = await file.read()
     if len(content) > 5 * 1024 * 1024:
         raise HTTPException(400, "File too large — max 5MB")
-    url = storage.upload(content, file.content_type)
+    content = _crop_square(content)
+    url = storage.upload(content, "image/jpeg")
     return {"url": url}
 
 
