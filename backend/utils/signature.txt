@@ -138,7 +138,7 @@
                     <tbody>
                         <tr>
                             <td style="vertical-align: top;"><a href="https://www.spatialedge.ai"><img
-                                    src="{{ imageBase }}/images/spatialedge-logo.png"
+                                    src="{{ imageBase }}/images/spatialedge-logo-navy.png"
                                     role="presentation" width="130" class="sc-cHGsZl bHiaRe"
                                     style="max-width: 130px; display: inline-block;"></a></td>
                             <td style="text-align: right; vertical-align: top;">
