@@ -27,7 +27,7 @@
                                 <div style="width: 30px;"></div>
                             </td>
                             <td color="#00b7f0" direction="vertical" width="1" class="sc-jhAzac hmXDXQ"
-                                style="width: 1px; border-bottom: none; border-left: 1px solid rgb(0, 183, 240);"></td>
+                                style="width: 1px; border-bottom: none; border-left: 1px solid #6385FF;"></td>
                             <td width="30">
                                 <div style="width: 30px;"></div>
                             </td>
@@ -43,11 +43,11 @@
                                                         <tr>
                                                             <td style="vertical-align: bottom;"><span color="#00b7f0"
                                                                     width="11" class="sc-jlyJG bbyJzT"
-                                                                    style="display: block; background-color: rgb(0, 183, 240);"><img
+                                                                    style="display: block; background-color: transparent;"><img
                                                                         src="{{ imageBase }}/images/phone.png"
                                                                         color="#00b7f0" width="13"
                                                                         class="sc-iRbamj blSEcj"
-                                                                        style="display: block; background-color: rgb(0, 183, 240);"></span>
+                                                                        style="display: block; background-color: transparent;"></span>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -65,11 +65,11 @@
                                                         <tr>
                                                             <td style="vertical-align: bottom;"><span color="#00b7f0"
                                                                     width="11" class="sc-jlyJG bbyJzT"
-                                                                    style="display: block; background-color: rgb(0, 183, 240);"><img
+                                                                    style="display: block; background-color: transparent;"><img
                                                                         src="{{ imageBase }}/images/envelope.png"
                                                                         color="#00b7f0" width="13"
                                                                         class="sc-iRbamj blSEcj"
-                                                                        style="display: block; background-color: rgb(0, 183, 240);"></span>
+                                                                        style="display: block; background-color: transparent;"></span>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -88,11 +88,11 @@
                                                         <tr>
                                                             <td style="vertical-align: bottom;"><span color="#00b7f0"
                                                                     width="11" class="sc-jlyJG bbyJzT"
-                                                                    style="display: block; background-color: rgb(0, 183, 240);"><img
+                                                                    style="display: block; background-color: transparent;"><img
                                                                         src="{{ imageBase }}/images/link.png"
                                                                         color="#00b7f0" width="13"
                                                                         class="sc-iRbamj blSEcj"
-                                                                        style="display: block; background-color: rgb(0, 183, 240);"></span>
+                                                                        style="display: block; background-color: transparent;"></span>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -121,7 +121,7 @@
                         </tr>
                         <tr>
                             <td color="#00b7f0" direction="horizontal" height="1" class="sc-jhAzac hmXDXQ"
-                                style="width: 100%; border-bottom: 1px solid rgb(0, 183, 240); border-left: none; display: block;">
+                                style="width: 100%; border-bottom: 1px solid #6385FF; border-left: none; display: block;">
                             </td>
                         </tr>
                         <tr>
@@ -148,11 +148,11 @@
                                         <tr style="text-align: right;">
                                             <td><a href="https://www.linkedin.com/company/spatialedge"
                                                     color="#00b7f0" class="sc-hzDkRC kpsoyz"
-                                                    style="display: inline-block; padding: 0px; background-color: rgb(0, 183, 240);"><img
+                                                    style="display: inline-block; padding: 0px; background-color: transparent;"><img
                                                         src="https://cdn2.hubspot.net/hubfs/53/tools/email-signature-generator/icons/linkedin-icon-2x.png"
                                                         alt="linkedin" color="#00b7f0" height="24"
                                                         class="sc-bRBYWo ccSRck"
-                                                        style="background-color: rgb(0, 183, 240); max-width: 135px; display: block;"></a>
+                                                        style="background-color: transparent; max-width: 135px; display: block;"></a>
                                             </td>
                                             <td width="5">
                                                 <div></div>
