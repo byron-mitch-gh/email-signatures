@@ -53,7 +53,7 @@
                                                     </tbody>
                                                 </table>
                                             </td>
-                                            <td style="padding: 0px; color: rgb(0, 0, 0);"><a href="tel:{{ phone }}"
+                                            <td style="padding: 0px 0px 0px 6px; color: rgb(0, 0, 0);"><a href="tel:{{ phone }}"
                                                     color="#000000" class="sc-gipzik iyhjGb"
                                                     style="text-decoration: none; color: rgb(0, 0, 0); font-size: 12px;"><span>{{ phone }}</span></a></td>
                                         </tr>
@@ -75,7 +75,7 @@
                                                     </tbody>
                                                 </table>
                                             </td>
-                                            <td style="padding: 0px;"><a href="mailto:{{ emailAddress }}"
+                                            <td style="padding: 0px 0px 0px 6px;"><a href="mailto:{{ emailAddress }}"
                                                     color="#000000" class="sc-gipzik iyhjGb"
                                                     style="text-decoration: none; color: rgb(0, 0, 0); font-size: 12px;"><span>{{ emailAddress }}</span></a>
                                             </td>
@@ -98,7 +98,7 @@
                                                     </tbody>
                                                 </table>
                                             </td>
-                                            <td style="padding: 0px;"><a href="{{ companyWebsiteLink }}"
+                                            <td style="padding: 0px 0px 0px 6px;"><a href="{{ companyWebsiteLink }}"
                                                     color="#000000" class="sc-gipzik iyhjGb"
                                                     style="text-decoration: none; color: rgb(0, 0, 0); font-size: 12px;"><span>{{ companyWebsiteLink }}</span></a>
                                             </td>
