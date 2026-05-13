@@ -9,7 +9,6 @@ const PHOTO_PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 let signatureTemplate = null;
 let photoUrl = null;
 let renderedHtml = null;
-let isSubmitting = false;
 let toastTimer = null;
 let cropperInstance = null;
 
@@ -58,7 +57,6 @@ function attachListeners() {
 
     document.getElementById('useUrlToggle').addEventListener('click', togglePhotoMode);
     document.getElementById('photoUrlInput').addEventListener('input', handlePhotoUrlInput);
-    document.getElementById('signatureForm').addEventListener('submit', handleSubmit);
     document.getElementById('copyBtn').addEventListener('click', copyHtml);
 }
 
@@ -236,69 +234,6 @@ function showPreviewPlaceholder() {
     renderedHtml = null;
 }
 
-// ── Form submission ───────────────────────────────────────────────────────────
-
-async function handleSubmit(e) {
-    e.preventDefault();
-    if (isSubmitting) return;
-
-    clearAllErrors();
-    const data = getFormData();
-    if (!validateForm(data)) return;
-
-    isSubmitting = true;
-    setSubmitLoading(true);
-
-    try {
-        const res = await fetch(`${API_BASE}/api/signatures`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-        });
-        if (!res.ok) {
-            const err = await res.json().catch(() => ({}));
-            throw new Error(err.detail || 'Failed to generate signature');
-        }
-        document.getElementById('sentToEmail').textContent = data.email;
-        document.getElementById('successModal').classList.remove('hidden');
-    } catch (err) {
-        showToast(err.message);
-    } finally {
-        isSubmitting = false;
-        setSubmitLoading(false);
-    }
-}
-
-function setSubmitLoading(loading) {
-    const btn = document.getElementById('submitBtn');
-    document.getElementById('btnText').classList.toggle('hidden', loading);
-    document.getElementById('btnSpinner').classList.toggle('hidden', !loading);
-    btn.disabled = loading;
-}
-
-// ── Validation ────────────────────────────────────────────────────────────────
-
-function validateForm(data) {
-    let ok = true;
-
-    if (!data.first_name)  { showFieldError('firstName', 'First name is required'); ok = false; }
-    if (!data.surname)     { showFieldError('surname',   'Surname is required'); ok = false; }
-    if (!data.job_title)   { showFieldError('jobTitle',  'Job title is required'); ok = false; }
-    if (!data.phone)       { showFieldError('phone',     'Phone number is required'); ok = false; }
-
-    if (!data.email) {
-        showFieldError('email', 'Email address is required'); ok = false;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-        showFieldError('email', 'Please enter a valid email address'); ok = false;
-    }
-
-    if (!photoUrl) {
-        showFieldError('photo', 'Please upload a profile photo or provide a URL'); ok = false;
-    }
-
-    return ok;
-}
-
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function getFormData() {
@@ -345,14 +280,10 @@ async function copyHtml() {
         await navigator.clipboard.writeText(renderedHtml);
         const btn = document.getElementById('copyBtn');
         btn.textContent = 'Copied!';
-        setTimeout(() => { btn.textContent = 'Copy HTML'; }, 2000);
+        setTimeout(() => { btn.textContent = 'Copy Signature'; }, 2000);
     } catch {
         showToast('Could not copy to clipboard — try a different browser.');
     }
-}
-
-function closeModal() {
-    document.getElementById('successModal').classList.add('hidden');
 }
 
 // ── Start ─────────────────────────────────────────────────────────────────────

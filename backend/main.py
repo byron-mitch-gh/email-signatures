@@ -7,11 +7,7 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from PIL import Image
-from pybars import Compiler
-from pydantic import BaseModel
 
-from mailer import Mailer
-from signature import Signature
 import storage
 
 load_dotenv()
@@ -27,7 +23,6 @@ app.add_middleware(
 
 UTILS_DIR = Path(__file__).parent / "utils"
 FRONTEND_DIR = Path(__file__).parent / "frontend"
-_compiler = Compiler()
 
 
 def _crop_square(data: bytes, size: int = 500) -> bytes:
@@ -41,19 +36,6 @@ def _crop_square(data: bytes, size: int = 500) -> bytes:
     img.save(buf, format="JPEG", quality=90)
     return buf.getvalue()
 
-
-def _render(sig_data: dict) -> str:
-    source = (UTILS_DIR / "signature.txt").read_text()
-    return _compiler.compile(source)(sig_data)
-
-
-class SignatureRequest(BaseModel):
-    first_name: str
-    surname: str
-    job_title: str
-    phone: str
-    email: str
-    profile_photo_url: str
 
 
 @app.get("/api/health")
@@ -77,14 +59,6 @@ async def upload_photo(file: UploadFile = File(...)):
     url = storage.upload(content, "image/jpeg")
     return {"url": url}
 
-
-@app.post("/api/signatures")
-def create_signature(req: SignatureRequest):
-    sig = Signature()
-    sig_data = sig.build(req.model_dump())
-    html = _render(sig_data)
-    Mailer().send_mail(html=html, to_email=req.email)
-    return {"html": html}
 
 
 # Serve frontend static files — mounted last so API routes take priority
