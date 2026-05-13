@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Signature Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-inner">
+            <img src="https://drive.google.com/uc?export=view&id=1W5Gh4-vmSPQdxuUtwJUgUlFKQaExEsPg" alt="Spatialedge"
+                class="header-logo" onerror="this.style.display='none'">
+            <div>
+                <h1 class="header-title">Email Signature Generator</h1>
+                <p class="header-subtitle">Fill in your details to generate and receive your personalised email
+                    signature</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+
+        <!-- FORM PANEL -->
+        <form class="form-panel" id="signatureForm" novalidate>
+
+            <section class="form-section">
+                <h2 class="section-title">Personal Details</h2>
+                <div class="field-row">
+                    <div class="field">
+                        <label for="firstName">First Name <span class="required">*</span></label>
+                        <input type="text" id="firstName" placeholder="John" autocomplete="given-name">
+                        <span class="field-error" id="firstNameError"></span>
+                    </div>
+                    <div class="field">
+                        <label for="surname">Surname <span class="required">*</span></label>
+                        <input type="text" id="surname" placeholder="Doe" autocomplete="family-name">
+                        <span class="field-error" id="surnameError"></span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="jobTitle">Job Title <span class="required">*</span></label>
+                    <input type="text" id="jobTitle" placeholder="Software Engineer">
+                    <span class="field-error" id="jobTitleError"></span>
+                </div>
+            </section>
+
+            <section class="form-section">
+                <h2 class="section-title">Contact Details</h2>
+                <div class="field">
+                    <label for="phone">Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phone" placeholder="+27 82 555 1234" autocomplete="tel">
+                    <span class="field-error" id="phoneError"></span>
+                </div>
+                <div class="field">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" placeholder="john@spatialedge.ai" autocomplete="email">
+                    <span class="field-error" id="emailError"></span>
+                </div>
+            </section>
+
+            <section class="form-section">
+                <h2 class="section-title">Profile Photo</h2>
+
+                <!-- File upload mode -->
+                <div id="photoFileArea">
+                    <div class="photo-upload-area" id="photoUploadArea">
+                        <div class="photo-preview">
+                            <div class="photo-placeholder" id="photoPlaceholder">
+                                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
+                                <p>Click or drag to upload</p>
+                                <span>PNG, JPG, WEBP — max 5MB</span>
+                            </div>
+                            <img id="photoImg" class="photo-img hidden" alt="Profile photo preview">
+                        </div>
+                        <input type="file" id="photoFile" accept="image/*" class="photo-input">
+                    </div>
+                    <div class="photo-upload-status" id="photoStatus"></div>
+                </div>
+
+                <!-- URL mode -->
+                <div id="photoUrlArea" class="hidden">
+                    <div class="field">
+                        <input type="url" id="photoUrlInput" placeholder="https://example.com/photo.jpg">
+                    </div>
+                </div>
+
+                <button type="button" class="url-toggle" id="useUrlToggle">Use URL instead</button>
+                <span class="field-error" id="photoError"></span>
+            </section>
+
+            <div class="form-footer">
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span id="btnText">Generate &amp; Send Signature</span>
+                    <span class="hidden" id="btnSpinner">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" class="spin">
+                            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                        </svg>
+                        Sending…
+                    </span>
+                </button>
+            </div>
+        </form>
+
+        <!-- PREVIEW PANEL -->
+        <div class="preview-panel">
+            <div class="preview-header">
+                <h2 class="preview-title">Live Preview</h2>
+                <button class="copy-btn" id="copyBtn" disabled>Copy HTML</button>
+            </div>
+            <div class="preview-container">
+                <div class="preview-placeholder" id="previewPlaceholder">
+                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" />
+                        <line x1="8" y1="21" x2="16" y2="21" />
+                        <line x1="12" y1="17" x2="12" y2="21" />
+                    </svg>
+                    <p>Your signature preview will appear here as you fill in the form</p>
+                </div>
+                <div class="preview-frame" id="previewFrame"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- SUCCESS MODAL -->
+    <div class="modal-overlay hidden" id="successModal">
+        <div class="modal">
+            <div class="modal-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+            </div>
+            <h2>Signature Sent!</h2>
+            <p>Your email signature has been sent to</p>
+            <p class="sent-email" id="sentToEmail"></p>
+            <p class="modal-note">Check your inbox — copy the signature from the email and paste it into your Gmail
+                settings under <em>Settings → General → Signature</em>.</p>
+            <button class="modal-btn" onclick="closeModal()">Done</button>
+        </div>
+    </div>
+
+    <!-- ERROR TOAST -->
+    <div class="toast hidden" id="errorToast">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        <span id="toastMessage"></span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
