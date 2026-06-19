@@ -37,6 +37,21 @@ function attachListeners() {
         document.getElementById(id).addEventListener('input', updatePreview)
     );
 
+    document.getElementById('includePhoto').addEventListener('change', () => {
+        const photoControls = document.getElementById('photoFileArea');
+        const urlArea = document.getElementById('photoUrlArea');
+        const urlToggle = document.getElementById('useUrlToggle');
+        const enabled = document.getElementById('includePhoto').checked;
+        photoControls.classList.toggle('hidden', !enabled);
+        urlArea.classList.toggle('hidden', true);
+        urlToggle.classList.toggle('hidden', !enabled);
+        if (!enabled) {
+            photoUrl = null;
+            document.getElementById('photoStatus').textContent = '';
+        }
+        updatePreview();
+    });
+
     const fileInput  = document.getElementById('photoFile');
     const uploadArea = document.getElementById('photoUploadArea');
 
@@ -100,10 +115,6 @@ function handlePhotoUrlInput() {
 function handlePhotoSelect(file) {
     if (!file.type.startsWith('image/')) {
         showFieldError('photo', 'Please select an image file.');
-        return;
-    }
-    if (file.size > 5 * 1024 * 1024) {
-        showFieldError('photo', 'Image must be under 5MB.');
         return;
     }
     clearFieldError('photo');
@@ -203,7 +214,9 @@ function updatePreview() {
         return;
     }
 
-    const html = renderTemplate(signatureTemplate, {
+    const includePhoto = document.getElementById('includePhoto').checked;
+
+    let html = renderTemplate(signatureTemplate, {
         profilePhotoSrc:    photoUrl || PHOTO_PLACEHOLDER,
         firstName:          d.first_name   || 'First',
         surname:            d.surname      || 'Surname',
@@ -216,6 +229,8 @@ function updatePreview() {
         linkedIn:           'spatialedge',
     });
 
+    if (!includePhoto) html = stripPhotoFromHtml(html);
+
     renderedHtml = html;
     document.getElementById('previewPlaceholder').classList.add('hidden');
     document.getElementById('previewFrame').innerHTML = html;
@@ -227,6 +242,13 @@ function renderTemplate(template, data) {
     return template.replace(/\{\{\s*(\w+)\s*\}\}/g, (_, key) =>
         data[key] !== undefined && data[key] !== null ? String(data[key]) : ''
     );
+}
+
+function stripPhotoFromHtml(html) {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const photoCell = doc.querySelector('[data-slot="photo"]');
+    if (photoCell) photoCell.remove();
+    return doc.body.innerHTML;
 }
 
 function showPreviewPlaceholder() {

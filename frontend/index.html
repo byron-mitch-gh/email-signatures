@@ -68,7 +68,13 @@
             </section>
 
             <section class="form-section">
-                <h2 class="section-title">Profile Photo</h2>
+                <div class="section-title-row">
+                    <h2 class="section-title">Profile Photo</h2>
+                    <label class="photo-toggle-label">
+                        <input type="checkbox" id="includePhoto" checked>
+                        <span>Include photo</span>
+                    </label>
+                </div>
 
                 <!-- File upload mode -->
                 <div id="photoFileArea">
@@ -81,7 +87,7 @@
                                     <circle cx="12" cy="7" r="4" />
                                 </svg>
                                 <p>Click or drag to upload</p>
-                                <span>PNG, JPG, WEBP — max 5MB</span>
+                                <span>PNG, JPG, WEBP</span>
                             </div>
                             <img id="photoImg" class="photo-img hidden" alt="Profile photo preview">
                         </div>

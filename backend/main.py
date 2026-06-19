@@ -25,15 +25,20 @@ UTILS_DIR = Path(__file__).parent / "utils"
 FRONTEND_DIR = Path(__file__).parent / "frontend"
 
 
-def _crop_square(data: bytes, size: int = 500) -> bytes:
+def _crop_square(data: bytes, size: int = 500, target_kb: int = 200) -> bytes:
     img = Image.open(io.BytesIO(data)).convert("RGB")
     w, h = img.size
     side = min(w, h)
     left = (w - side) // 2
     top = (h - side) // 2
     img = img.crop((left, top, left + side, top + side)).resize((size, size), Image.LANCZOS)
-    buf = io.BytesIO()
-    img.save(buf, format="JPEG", quality=90)
+    quality = 85
+    while quality >= 40:
+        buf = io.BytesIO()
+        img.save(buf, format="JPEG", quality=quality, optimize=True)
+        if buf.tell() <= target_kb * 1024:
+            break
+        quality -= 10
     return buf.getvalue()
 
 
@@ -53,8 +58,6 @@ async def upload_photo(file: UploadFile = File(...)):
     if not file.content_type or not file.content_type.startswith("image/"):
         raise HTTPException(400, "File must be an image")
     content = await file.read()
-    if len(content) > 5 * 1024 * 1024:
-        raise HTTPException(400, "File too large — max 5MB")
     content = _crop_square(content)
     url = storage.upload(content, "image/jpeg")
     return {"url": url}
