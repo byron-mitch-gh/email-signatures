@@ -562,8 +562,8 @@ select option {
 
 .preview-header {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 12px;
     padding: 14px 20px;
     border-bottom: 1px solid var(--border);
 }
@@ -576,35 +576,34 @@ select option {
 
 .variant-tabs {
     display: flex;
-    gap: 0;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 3px;
+    gap: 6px;
 }
 
 .variant-tab {
-    background: none;
-    border: none;
+    flex: 1;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
     color: var(--text-muted);
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 700;
     font-family: 'Montserrat', sans-serif;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.4px;
     text-transform: uppercase;
-    padding: 5px 12px;
-    border-radius: 6px;
+    padding: 8px 12px;
+    border-radius: var(--radius);
     cursor: pointer;
-    transition: background 0.15s, color 0.15s;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
     white-space: nowrap;
 }
 
 .variant-tab.active {
-    background: rgba(99, 133, 255, 0.22);
+    background: rgba(99, 133, 255, 0.2);
+    border-color: rgba(99, 133, 255, 0.5);
     color: var(--primary-light);
 }
 
 .variant-tab:not(.active):hover {
+    background: rgba(255, 255, 255, 0.08);
     color: var(--text);
 }
 

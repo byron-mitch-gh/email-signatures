@@ -57,6 +57,8 @@ function attachListeners() {
         if (e.dataTransfer.files[0]) handlePhotoSelect(e.dataTransfer.files[0]);
     });
 
+    document.getElementById('variantWith').addEventListener('click', () => selectVariant(true));
+    document.getElementById('variantWithout').addEventListener('click', () => selectVariant(false));
     document.getElementById('useUrlToggle').addEventListener('click', togglePhotoMode);
     document.getElementById('photoUrlInput').addEventListener('input', handlePhotoUrlInput);
     document.getElementById('copyBtn').addEventListener('click', copyHtml);
