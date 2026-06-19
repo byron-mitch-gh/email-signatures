@@ -152,22 +152,6 @@ body {
     margin-bottom: 0;
 }
 
-.photo-toggle-label {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 12px;
-    color: var(--text-muted);
-    cursor: pointer;
-    user-select: none;
-}
-
-.photo-toggle-label input[type="checkbox"] {
-    width: 15px;
-    height: 15px;
-    accent-color: var(--primary-light);
-    cursor: pointer;
-}
 
 .field-row {
     display: grid;

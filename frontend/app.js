@@ -11,6 +11,7 @@ let photoUrl = null;
 let renderedHtml = null;
 let toastTimer = null;
 let cropperInstance = null;
+let includePhoto = true;
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
 
@@ -37,15 +38,13 @@ function attachListeners() {
         document.getElementById(id).addEventListener('input', updatePreview)
     );
 
-    document.getElementById('includePhoto').addEventListener('change', () => {
-        const photoControls = document.getElementById('photoFileArea');
-        const urlArea = document.getElementById('photoUrlArea');
-        const urlToggle = document.getElementById('useUrlToggle');
-        const enabled = document.getElementById('includePhoto').checked;
-        photoControls.classList.toggle('hidden', !enabled);
-        urlArea.classList.toggle('hidden', true);
-        urlToggle.classList.toggle('hidden', !enabled);
-        if (!enabled) {
+    document.getElementById('photoToggleBtn').addEventListener('click', () => {
+        includePhoto = !includePhoto;
+        document.getElementById('photoToggleBtn').textContent = includePhoto ? 'Remove photo' : 'Add photo';
+        document.getElementById('photoFileArea').classList.toggle('hidden', !includePhoto);
+        document.getElementById('photoUrlArea').classList.add('hidden');
+        document.getElementById('useUrlToggle').classList.toggle('hidden', !includePhoto);
+        if (!includePhoto) {
             photoUrl = null;
             document.getElementById('photoStatus').textContent = '';
         }
@@ -214,8 +213,6 @@ function updatePreview() {
         return;
     }
 
-    const includePhoto = document.getElementById('includePhoto').checked;
-
     let html = renderTemplate(signatureTemplate, {
         profilePhotoSrc:    photoUrl || PHOTO_PLACEHOLDER,
         firstName:          d.first_name   || 'First',
@@ -246,7 +243,7 @@ function renderTemplate(template, data) {
 
 function stripPhotoFromHtml(html) {
     const doc = new DOMParser().parseFromString(html, 'text/html');
-    const photoCell = doc.querySelector('[data-slot="photo"]');
+    const photoCell = doc.querySelector('[data-slot="photo"]') || doc.querySelector('td[width="150"]');
     if (photoCell) photoCell.remove();
     return doc.body.innerHTML;
 }

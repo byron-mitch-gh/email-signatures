@@ -179,7 +179,7 @@
                             <td height="10"></td>
                         </tr>
                         <tr>
-                            <td style="color: rgb(120, 120, 120); font-size: 9px; line-height: 14px; font-family: Arial;">
+                            <td style="color: rgb(120, 120, 120); font-size: 9px; line-height: 14px; font-family: Arial; text-align: left;">
                                 <strong>Confidentiality Note and Disclaimer:</strong><br>
                                 This communication, including all attachments and links, is the proprietary and confidential information of Spatialedge. It is confidential, directly and indirectly, and intended for the addressee only.<br>
                                 If you suspect or know that you received this communication by error, please notify the sender and dispose of this communication and ensure it stays confidential as stated.<br>
