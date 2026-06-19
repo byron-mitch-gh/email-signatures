@@ -68,37 +68,46 @@
             </section>
 
             <section class="form-section">
-                <h2 class="section-title">Profile Photo</h2>
+                <div class="photo-section-header">
+                    <h2 class="section-title">Profile Photo</h2>
+                    <div class="photo-toggle" id="photoToggle">
+                        <button class="photo-toggle-btn active" id="toggleWith" type="button">With Photo</button>
+                        <button class="photo-toggle-btn" id="toggleWithout" type="button">Without Photo</button>
+                        <span class="photo-toggle-slider" aria-hidden="true"></span>
+                    </div>
+                </div>
 
-                <!-- File upload mode -->
-                <div id="photoFileArea">
-                    <div class="photo-upload-area" id="photoUploadArea">
-                        <div class="photo-preview">
-                            <div class="photo-placeholder" id="photoPlaceholder">
-                                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                    <circle cx="12" cy="7" r="4" />
-                                </svg>
-                                <p>Click or drag to upload</p>
-                                <span>PNG, JPG, WEBP</span>
+                <div class="photo-section-content" id="photoSectionContent">
+                    <!-- File upload mode -->
+                    <div id="photoFileArea">
+                        <div class="photo-upload-area" id="photoUploadArea">
+                            <div class="photo-preview">
+                                <div class="photo-placeholder" id="photoPlaceholder">
+                                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" />
+                                    </svg>
+                                    <p>Click or drag to upload</p>
+                                    <span>PNG, JPG, WEBP</span>
+                                </div>
+                                <img id="photoImg" class="photo-img hidden" alt="Profile photo preview">
                             </div>
-                            <img id="photoImg" class="photo-img hidden" alt="Profile photo preview">
+                            <input type="file" id="photoFile" accept="image/*" class="photo-input">
                         </div>
-                        <input type="file" id="photoFile" accept="image/*" class="photo-input">
+                        <div class="photo-upload-status" id="photoStatus"></div>
                     </div>
-                    <div class="photo-upload-status" id="photoStatus"></div>
-                </div>
 
-                <!-- URL mode -->
-                <div id="photoUrlArea" class="hidden">
-                    <div class="field">
-                        <input type="url" id="photoUrlInput" placeholder="https://example.com/photo.jpg">
+                    <!-- URL mode -->
+                    <div id="photoUrlArea" class="hidden">
+                        <div class="field">
+                            <input type="url" id="photoUrlInput" placeholder="https://example.com/photo.jpg">
+                        </div>
                     </div>
-                </div>
 
-                <button type="button" class="url-toggle" id="useUrlToggle">Use URL instead</button>
-                <span class="field-error" id="photoError"></span>
+                    <button type="button" class="url-toggle" id="useUrlToggle">Use URL instead</button>
+                    <span class="field-error" id="photoError"></span>
+                </div>
             </section>
 
         </div>
@@ -107,10 +116,6 @@
         <div class="preview-panel">
             <div class="preview-header">
                 <h2 class="preview-title">Live Preview</h2>
-                <div class="variant-tabs">
-                    <button class="variant-tab active" id="variantWith">With Photo</button>
-                    <button class="variant-tab" id="variantWithout">Without Photo</button>
-                </div>
             </div>
             <div class="preview-container">
                 <div class="preview-placeholder" id="previewPlaceholder">

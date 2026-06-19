@@ -6,7 +6,10 @@ const API_BASE = window.location.hostname === 'localhost' || window.location.hos
 // Silhouette placeholder shown in preview before a photo is uploaded
 const PHOTO_PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='130' height='130' viewBox='0 0 130 130'%3E%3Crect width='130' height='130' fill='%23e2e8f0'/%3E%3Ccircle cx='65' cy='48' r='26' fill='%23a0aec0'/%3E%3Cellipse cx='65' cy='108' rx='38' ry='26' fill='%23a0aec0'/%3E%3C/svg%3E";
 
-let signatureTemplate = null;
+const COMPRESS_THRESHOLD_BYTES = 5 * 1024 * 1024; // 5 MB
+
+let templateWithPhoto = null;
+let templateWithout = null;
 let photoUrl = null;
 let renderedHtml = null;
 let toastTimer = null;
@@ -17,18 +20,19 @@ let includePhoto = true;
 
 async function init() {
     try {
-        await loadTemplate();
+        await loadTemplates();
     } catch {
         showToast('Could not reach the backend — is it running?');
     }
     attachListeners();
 }
 
-async function loadTemplate() {
-    const res = await fetch(`${API_BASE}/api/template`);
-    if (!res.ok) throw new Error('template fetch failed');
+async function loadTemplates() {
+    const res = await fetch(`${API_BASE}/api/templates`);
+    if (!res.ok) throw new Error('templates fetch failed');
     const data = await res.json();
-    signatureTemplate = data.template;
+    templateWithPhoto = data.with_photo;
+    templateWithout = data.without_photo;
 }
 
 // ── Event listeners ───────────────────────────────────────────────────────────
@@ -37,7 +41,6 @@ function attachListeners() {
     ['firstName', 'surname', 'jobTitle', 'phone', 'email'].forEach(id =>
         document.getElementById(id).addEventListener('input', updatePreview)
     );
-
 
     const fileInput  = document.getElementById('photoFile');
     const uploadArea = document.getElementById('photoUploadArea');
@@ -57,12 +60,31 @@ function attachListeners() {
         if (e.dataTransfer.files[0]) handlePhotoSelect(e.dataTransfer.files[0]);
     });
 
-    document.getElementById('variantWith').addEventListener('click', () => selectVariant(true));
-    document.getElementById('variantWithout').addEventListener('click', () => selectVariant(false));
+    document.getElementById('toggleWith').addEventListener('click', () => selectVariant(true));
+    document.getElementById('toggleWithout').addEventListener('click', () => selectVariant(false));
     document.getElementById('useUrlToggle').addEventListener('click', togglePhotoMode);
     document.getElementById('photoUrlInput').addEventListener('input', handlePhotoUrlInput);
     document.getElementById('copyBtn').addEventListener('click', copyHtml);
     document.getElementById('addGmailBtn').addEventListener('click', openGmailModal);
+}
+
+// ── Variant toggle ────────────────────────────────────────────────────────────
+
+function selectVariant(withPhoto) {
+    includePhoto = withPhoto;
+
+    const toggle  = document.getElementById('photoToggle');
+    const btnWith = document.getElementById('toggleWith');
+    const btnWithout = document.getElementById('toggleWithout');
+    const content = document.getElementById('photoSectionContent');
+
+    toggle.classList.toggle('variant-without', !withPhoto);
+    btnWith.classList.toggle('active', withPhoto);
+    btnWithout.classList.toggle('active', !withPhoto);
+
+    content.classList.toggle('collapsed', !withPhoto);
+
+    updatePreview();
 }
 
 // ── Photo handling ────────────────────────────────────────────────────────────
@@ -77,7 +99,6 @@ function togglePhotoMode() {
     urlArea.classList.toggle('hidden', !toUrl);
     toggle.textContent = toUrl ? 'Upload file instead' : 'Use URL instead';
 
-    // Reset photo state when switching modes
     photoUrl = null;
     document.getElementById('photoStatus').textContent = '';
     clearFieldError('photo');
@@ -101,13 +122,44 @@ function handlePhotoUrlInput() {
     updatePreview();
 }
 
-function handlePhotoSelect(file) {
+async function handlePhotoSelect(file) {
     if (!file.type.startsWith('image/')) {
         showFieldError('photo', 'Please select an image file.');
         return;
     }
     clearFieldError('photo');
-    openCropModal(file);
+    const processed = await preprocessImageFile(file);
+    openCropModal(processed);
+}
+
+// ── Image compression ─────────────────────────────────────────────────────────
+
+async function preprocessImageFile(file) {
+    if (file.size <= COMPRESS_THRESHOLD_BYTES) return file;
+
+    return new Promise(resolve => {
+        const objectUrl = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => {
+            URL.revokeObjectURL(objectUrl);
+            const MAX_DIM = 2000;
+            let { naturalWidth: w, naturalHeight: h } = img;
+            if (w > MAX_DIM || h > MAX_DIM) {
+                const ratio = Math.min(MAX_DIM / w, MAX_DIM / h);
+                w = Math.round(w * ratio);
+                h = Math.round(h * ratio);
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            canvas.toBlob(blob => {
+                resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+            }, 'image/jpeg', 0.85);
+        };
+        img.onerror = () => { URL.revokeObjectURL(objectUrl); resolve(file); };
+        img.src = objectUrl;
+    });
 }
 
 // ── Crop modal ────────────────────────────────────────────────────────────────
@@ -143,7 +195,6 @@ function confirmCrop() {
     const canvas = cropperInstance.getCroppedCanvas({ width: 500, height: 500, imageSmoothingQuality: 'high' });
 
     canvas.toBlob(async (blob) => {
-        // Update form panel preview instantly
         document.getElementById('photoPlaceholder').classList.add('hidden');
         const previewImg = document.getElementById('photoImg');
         previewImg.src = canvas.toDataURL('image/jpeg', 0.9);
@@ -195,7 +246,8 @@ function setPhotoStatus(cls, text) {
 // ── Live preview ──────────────────────────────────────────────────────────────
 
 function updatePreview() {
-    if (!signatureTemplate) return;
+    const template = includePhoto ? templateWithPhoto : templateWithout;
+    if (!template) return;
 
     const d = getFormData();
     if (!d.first_name && !d.surname) {
@@ -203,7 +255,7 @@ function updatePreview() {
         return;
     }
 
-    let html = renderTemplate(signatureTemplate, {
+    const html = renderTemplate(template, {
         profilePhotoSrc:    photoUrl || PHOTO_PLACEHOLDER,
         firstName:          d.first_name   || 'First',
         surname:            d.surname      || 'Surname',
@@ -215,8 +267,6 @@ function updatePreview() {
         imageBase:          API_BASE || window.location.origin,
         linkedIn:           'spatialedge',
     });
-
-    if (!includePhoto) html = stripPhotoFromHtml(html);
 
     renderedHtml = html;
     document.getElementById('previewPlaceholder').classList.add('hidden');
@@ -231,26 +281,12 @@ function renderTemplate(template, data) {
     );
 }
 
-function stripPhotoFromHtml(html) {
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-    const photoCell = doc.querySelector('[data-slot="photo"]') || doc.querySelector('td[width="150"]');
-    if (photoCell) photoCell.remove();
-    return doc.body.innerHTML;
-}
-
 function showPreviewPlaceholder() {
     document.getElementById('previewPlaceholder').classList.remove('hidden');
     document.getElementById('previewFrame').innerHTML = '';
     document.getElementById('copyBtn').disabled = true;
     document.getElementById('addGmailBtn').disabled = true;
     renderedHtml = null;
-}
-
-function selectVariant(withPhoto) {
-    includePhoto = withPhoto;
-    document.getElementById('variantWith').classList.toggle('active', withPhoto);
-    document.getElementById('variantWithout').classList.toggle('active', !withPhoto);
-    updatePreview();
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -319,7 +355,7 @@ function fitSignaturePreview() {
     const box = document.querySelector('.gmail-signature-box');
     const scaler = document.querySelector('.gmail-signature-scaler');
     if (!box || !scaler) return;
-    const available = box.clientWidth - 48; // subtract 24px padding each side
+    const available = box.clientWidth - 48;
     const natural = scaler.scrollWidth;
     if (natural > 0) {
         const scale = Math.min(1, available / natural);
@@ -345,7 +381,6 @@ async function copyForGmail() {
         btn.textContent = 'Copied!';
         setTimeout(() => { btn.textContent = 'Copy Signature'; }, 2000);
     } catch {
-        // execCommand fallback for browsers without ClipboardItem support
         const el = document.createElement('div');
         el.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
         el.contentEditable = 'true';

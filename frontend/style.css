@@ -562,8 +562,7 @@ select option {
 
 .preview-header {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    align-items: center;
     padding: 14px 20px;
     border-bottom: 1px solid var(--border);
 }
@@ -574,37 +573,77 @@ select option {
     color: var(--text);
 }
 
-.variant-tabs {
+/* ── Photo section toggle ──────────────────────── */
+.photo-section-header {
     display: flex;
-    gap: 6px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
 }
 
-.variant-tab {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.04);
+.photo-section-header .section-title {
+    margin-bottom: 0;
+}
+
+.photo-toggle {
+    position: relative;
+    display: flex;
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 3px;
+}
+
+.photo-toggle-btn {
+    position: relative;
+    z-index: 1;
+    background: none;
+    border: none;
     color: var(--text-muted);
     font-size: 11px;
     font-weight: 700;
     font-family: 'Montserrat', sans-serif;
-    letter-spacing: 0.4px;
+    letter-spacing: 0.3px;
     text-transform: uppercase;
-    padding: 8px 12px;
-    border-radius: var(--radius);
+    padding: 6px 11px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    transition: color 0.2s;
     white-space: nowrap;
 }
 
-.variant-tab.active {
-    background: rgba(99, 133, 255, 0.2);
-    border-color: rgba(99, 133, 255, 0.5);
+.photo-toggle-btn.active {
     color: var(--primary-light);
 }
 
-.variant-tab:not(.active):hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: var(--text);
+.photo-toggle-slider {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    width: calc(50% - 3px);
+    background: rgba(99, 133, 255, 0.2);
+    border: 1px solid rgba(99, 133, 255, 0.4);
+    border-radius: 5px;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+}
+
+.photo-toggle.variant-without .photo-toggle-slider {
+    transform: translateX(100%);
+}
+
+.photo-section-content {
+    overflow: hidden;
+    max-height: 600px;
+    opacity: 1;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+}
+
+.photo-section-content.collapsed {
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
 }
 
 

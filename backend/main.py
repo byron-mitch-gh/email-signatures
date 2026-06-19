@@ -53,6 +53,14 @@ def get_template():
     return {"template": (UTILS_DIR / "signature.txt").read_text()}
 
 
+@app.get("/api/templates")
+def get_templates():
+    return {
+        "with_photo": (UTILS_DIR / "signature.txt").read_text(),
+        "without_photo": (UTILS_DIR / "signature_without_photo.txt").read_text(),
+    }
+
+
 @app.post("/api/photos")
 async def upload_photo(file: UploadFile = File(...)):
     if not file.content_type or not file.content_type.startswith("image/"):
