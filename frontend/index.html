@@ -68,10 +68,7 @@
             </section>
 
             <section class="form-section">
-                <div class="section-title-row">
-                    <h2 class="section-title">Profile Photo</h2>
-                    <button type="button" class="url-toggle" id="photoToggleBtn">Remove photo</button>
-                </div>
+                <h2 class="section-title">Profile Photo</h2>
 
                 <!-- File upload mode -->
                 <div id="photoFileArea">
@@ -110,6 +107,10 @@
         <div class="preview-panel">
             <div class="preview-header">
                 <h2 class="preview-title">Live Preview</h2>
+                <div class="variant-tabs">
+                    <button class="variant-tab active" id="variantWith" onclick="selectVariant(true)">With Photo</button>
+                    <button class="variant-tab" id="variantWithout" onclick="selectVariant(false)">Without Photo</button>
+                </div>
             </div>
             <div class="preview-container">
                 <div class="preview-placeholder" id="previewPlaceholder">

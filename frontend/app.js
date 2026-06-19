@@ -38,18 +38,6 @@ function attachListeners() {
         document.getElementById(id).addEventListener('input', updatePreview)
     );
 
-    document.getElementById('photoToggleBtn').addEventListener('click', () => {
-        includePhoto = !includePhoto;
-        document.getElementById('photoToggleBtn').textContent = includePhoto ? 'Remove photo' : 'Add photo';
-        document.getElementById('photoFileArea').classList.toggle('hidden', !includePhoto);
-        document.getElementById('photoUrlArea').classList.add('hidden');
-        document.getElementById('useUrlToggle').classList.toggle('hidden', !includePhoto);
-        if (!includePhoto) {
-            photoUrl = null;
-            document.getElementById('photoStatus').textContent = '';
-        }
-        updatePreview();
-    });
 
     const fileInput  = document.getElementById('photoFile');
     const uploadArea = document.getElementById('photoUploadArea');
@@ -254,6 +242,13 @@ function showPreviewPlaceholder() {
     document.getElementById('copyBtn').disabled = true;
     document.getElementById('addGmailBtn').disabled = true;
     renderedHtml = null;
+}
+
+function selectVariant(withPhoto) {
+    includePhoto = withPhoto;
+    document.getElementById('variantWith').classList.toggle('active', withPhoto);
+    document.getElementById('variantWithout').classList.toggle('active', !withPhoto);
+    updatePreview();
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────

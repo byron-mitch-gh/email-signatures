@@ -141,16 +141,6 @@ body {
     margin-bottom: 16px;
 }
 
-.section-title-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-}
-
-.section-title-row .section-title {
-    margin-bottom: 0;
-}
 
 
 .field-row {
@@ -581,6 +571,40 @@ select option {
 .preview-title {
     font-size: 13px;
     font-weight: 600;
+    color: var(--text);
+}
+
+.variant-tabs {
+    display: flex;
+    gap: 0;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 3px;
+}
+
+.variant-tab {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+
+.variant-tab.active {
+    background: rgba(99, 133, 255, 0.22);
+    color: var(--primary-light);
+}
+
+.variant-tab:not(.active):hover {
     color: var(--text);
 }
 
