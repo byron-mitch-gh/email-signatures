@@ -63,12 +63,8 @@ function attachListeners() {
 
     document.getElementById('toggleWith').addEventListener('click', () => selectVariant(true));
     document.getElementById('toggleWithout').addEventListener('click', () => selectVariant(false));
-    document.getElementById('showPhoneToggle').addEventListener('change', function () {
-        showPhone = this.checked;
-        document.getElementById('phone').classList.toggle('hidden', !showPhone);
-        document.getElementById('phoneError').classList.toggle('hidden', !showPhone);
-        updatePreview();
-    });
+    document.getElementById('togglePhoneShow').addEventListener('click', () => setPhoneVisibility(true));
+    document.getElementById('togglePhoneHide').addEventListener('click', () => setPhoneVisibility(false));
     document.getElementById('copyBtn').addEventListener('click', copyHtml);
     document.getElementById('addGmailBtn').addEventListener('click', openGmailModal);
 }
@@ -89,6 +85,18 @@ function selectVariant(withPhoto) {
 
     content.classList.toggle('collapsed', !withPhoto);
 
+    updatePreview();
+}
+
+// ── Phone visibility toggle ───────────────────────────────────────────────────
+
+function setPhoneVisibility(show) {
+    showPhone = show;
+    document.getElementById('phoneToggle').classList.toggle('variant-off', !show);
+    document.getElementById('togglePhoneShow').classList.toggle('active', show);
+    document.getElementById('togglePhoneHide').classList.toggle('active', !show);
+    document.getElementById('phone').classList.toggle('hidden', !show);
+    document.getElementById('phoneError').classList.toggle('hidden', !show);
     updatePreview();
 }
 

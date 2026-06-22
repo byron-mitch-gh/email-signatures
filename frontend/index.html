@@ -58,10 +58,11 @@
                 <div class="field">
                     <div class="field-label-row">
                         <label for="phone">Phone Number</label>
-                        <label class="field-switch" for="showPhoneToggle">
-                            <input type="checkbox" id="showPhoneToggle" checked>
-                            <span class="field-switch-track"></span>
-                        </label>
+                        <div class="photo-toggle" id="phoneToggle">
+                            <button class="photo-toggle-btn active" id="togglePhoneShow" type="button">Show</button>
+                            <button class="photo-toggle-btn" id="togglePhoneHide" type="button">Hide</button>
+                            <span class="photo-toggle-slider" aria-hidden="true"></span>
+                        </div>
                     </div>
                     <input type="tel" id="phone" placeholder="+27 82 555 1234" autocomplete="tel">
                     <span class="field-error" id="phoneError"></span>

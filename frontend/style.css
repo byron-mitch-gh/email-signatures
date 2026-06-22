@@ -232,52 +232,8 @@ select option {
 
 .field-label-row label { margin-bottom: 0; }
 
-.field-switch {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-
-.field-switch input {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.field-switch-track {
-    display: block;
-    width: 30px;
-    height: 17px;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    transition: background 0.2s, border-color 0.2s;
-    position: relative;
-}
-
-.field-switch-track::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 11px;
-    height: 11px;
-    background: rgba(255, 255, 255, 0.4);
-    border-radius: 50%;
-    transition: transform 0.2s, background 0.2s;
-}
-
-.field-switch input:checked + .field-switch-track {
-    background: rgba(99, 133, 255, 0.35);
-    border-color: rgba(99, 133, 255, 0.5);
-}
-
-.field-switch input:checked + .field-switch-track::after {
-    transform: translateX(13px);
-    background: var(--primary-light);
+.photo-toggle.variant-off .photo-toggle-slider {
+    transform: translateX(100%);
 }
 
 /* ── Photo upload ───────────────────────────────── */
