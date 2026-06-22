@@ -373,12 +373,20 @@ select option {
 }
 
 .gmail-modal-header {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding: 20px 24px;
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
+}
+
+.gmail-modal-header .modal-close {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .gmail-modal-scroll {
