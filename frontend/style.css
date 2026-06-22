@@ -360,13 +360,15 @@ select option {
 
 /* ── Gmail modal ───────────────────────────────── */
 .gmail-modal {
-    max-width: 760px;
-    width: 96vw;
+    width: 40vw;
+    min-width: 460px;
+    max-width: 680px;
     padding: 0;
     text-align: left;
     max-height: 90vh;
     overflow-y: auto;
     overflow-x: hidden;
+    border-radius: 16px;
 }
 
 .gmail-modal-header {
@@ -518,7 +520,7 @@ select option {
     text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
-    border-radius: 0;
+    border-radius: 0 0 16px 16px;
     transition: background 0.2s, color 0.2s;
 }
 
@@ -687,6 +689,12 @@ select option {
     width: 90%;
     text-align: center;
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.gmail-modal {
+    width: 40vw;
+    min-width: 460px;
+    max-width: 680px;
 }
 
 .modal-icon {
