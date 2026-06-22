@@ -56,7 +56,13 @@
             <section class="form-section">
                 <h2 class="section-title">Contact Details</h2>
                 <div class="field">
-                    <label for="phone">Phone Number</label>
+                    <div class="field-label-row">
+                        <label for="phone">Phone Number</label>
+                        <label class="field-switch" for="showPhoneToggle">
+                            <input type="checkbox" id="showPhoneToggle" checked>
+                            <span class="field-switch-track"></span>
+                        </label>
+                    </div>
                     <input type="tel" id="phone" placeholder="+27 82 555 1234" autocomplete="tel">
                     <span class="field-error" id="phoneError"></span>
                 </div>

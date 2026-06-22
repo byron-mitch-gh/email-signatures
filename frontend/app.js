@@ -15,6 +15,7 @@ let renderedHtml = null;
 let toastTimer = null;
 let cropperInstance = null;
 let includePhoto = true;
+let showPhone = true;
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
 
@@ -62,6 +63,12 @@ function attachListeners() {
 
     document.getElementById('toggleWith').addEventListener('click', () => selectVariant(true));
     document.getElementById('toggleWithout').addEventListener('click', () => selectVariant(false));
+    document.getElementById('showPhoneToggle').addEventListener('change', function () {
+        showPhone = this.checked;
+        document.getElementById('phone').classList.toggle('hidden', !showPhone);
+        document.getElementById('phoneError').classList.toggle('hidden', !showPhone);
+        updatePreview();
+    });
     document.getElementById('copyBtn').addEventListener('click', copyHtml);
     document.getElementById('addGmailBtn').addEventListener('click', openGmailModal);
 }
@@ -233,11 +240,23 @@ function updatePreview() {
         linkedIn:           'spatialedge',
     });
 
-    renderedHtml = html;
+    const processed = showPhone ? html : stripPhoneRow(html);
+    renderedHtml = processed;
     document.getElementById('previewPlaceholder').classList.add('hidden');
-    document.getElementById('previewFrame').innerHTML = html;
+    document.getElementById('previewFrame').innerHTML = processed;
     document.getElementById('copyBtn').disabled = false;
     document.getElementById('addGmailBtn').disabled = false;
+}
+
+function stripPhoneRow(html) {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    const phoneLink = div.querySelector('a[href^="tel:"]');
+    if (phoneLink) {
+        const row = phoneLink.closest('tr[height="25"]');
+        if (row) row.remove();
+    }
+    return div.innerHTML;
 }
 
 function renderTemplate(template, data) {
