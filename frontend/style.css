@@ -366,9 +366,10 @@ select option {
     padding: 0;
     text-align: left;
     max-height: 90vh;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
     border-radius: 16px;
+    display: flex;
+    flex-direction: column;
 }
 
 .gmail-modal-header {
@@ -377,10 +378,13 @@ select option {
     justify-content: space-between;
     padding: 20px 24px;
     border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    background: var(--card);
-    z-index: 1;
+    flex-shrink: 0;
+}
+
+.gmail-modal-scroll {
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
 }
 
 .gmail-modal-header h2 {
@@ -507,9 +511,8 @@ select option {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 15px 24px;
+    margin: 0 16px 16px;
+    padding: 14px 24px;
     background: rgba(99, 133, 255, 0.18);
     color: var(--primary-light);
     border: none;
@@ -520,7 +523,7 @@ select option {
     text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
-    border-radius: 0 0 16px 16px;
+    border-radius: 8px;
     transition: background 0.2s, color 0.2s;
 }
 
@@ -695,6 +698,7 @@ select option {
     width: 40vw;
     min-width: 460px;
     max-width: 680px;
+    overflow: hidden;
 }
 
 .modal-icon {
