@@ -305,23 +305,6 @@ select option {
     color: var(--error);
 }
 
-.url-toggle {
-    background: none;
-    border: none;
-    color: var(--primary-light);
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    padding: 6px 0 0;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    display: block;
-    font-family: inherit;
-}
-
-.url-toggle:hover {
-    color: var(--primary);
-}
 
 /* ── Preview footer ────────────────────────────── */
 .preview-footer-actions {
@@ -587,7 +570,8 @@ select option {
 
 .photo-toggle {
     position: relative;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -597,6 +581,8 @@ select option {
 .photo-toggle-btn {
     position: relative;
     z-index: 1;
+    flex: 1;
+    text-align: center;
     background: none;
     border: none;
     color: var(--text-muted);

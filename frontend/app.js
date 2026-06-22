@@ -62,8 +62,6 @@ function attachListeners() {
 
     document.getElementById('toggleWith').addEventListener('click', () => selectVariant(true));
     document.getElementById('toggleWithout').addEventListener('click', () => selectVariant(false));
-    document.getElementById('useUrlToggle').addEventListener('click', togglePhotoMode);
-    document.getElementById('photoUrlInput').addEventListener('input', handlePhotoUrlInput);
     document.getElementById('copyBtn').addEventListener('click', copyHtml);
     document.getElementById('addGmailBtn').addEventListener('click', openGmailModal);
 }
@@ -88,39 +86,6 @@ function selectVariant(withPhoto) {
 }
 
 // ── Photo handling ────────────────────────────────────────────────────────────
-
-function togglePhotoMode() {
-    const fileArea = document.getElementById('photoFileArea');
-    const urlArea  = document.getElementById('photoUrlArea');
-    const toggle   = document.getElementById('useUrlToggle');
-    const toUrl    = urlArea.classList.contains('hidden');
-
-    fileArea.classList.toggle('hidden', toUrl);
-    urlArea.classList.toggle('hidden', !toUrl);
-    toggle.textContent = toUrl ? 'Upload file instead' : 'Use URL instead';
-
-    photoUrl = null;
-    document.getElementById('photoStatus').textContent = '';
-    clearFieldError('photo');
-    updatePreview();
-}
-
-function handlePhotoUrlInput() {
-    const url = document.getElementById('photoUrlInput').value.trim();
-    photoUrl = url || null;
-
-    const img = document.getElementById('photoImg');
-    if (url) {
-        document.getElementById('photoPlaceholder').classList.add('hidden');
-        img.src = url;
-        img.classList.remove('hidden');
-    } else {
-        document.getElementById('photoPlaceholder').classList.remove('hidden');
-        img.classList.add('hidden');
-    }
-    clearFieldError('photo');
-    updatePreview();
-}
 
 async function handlePhotoSelect(file) {
     if (!file.type.startsWith('image/')) {
