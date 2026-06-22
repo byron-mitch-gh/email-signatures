@@ -226,7 +226,7 @@ function updatePreview() {
         surname:            d.surname      || 'Surname',
         jobTitle:           d.job_title    || 'Job Title',
         company:            'Spatialedge',
-        phone:              d.phone        || '+XX XX XXX XXXX',
+        phone:              d.phone        || '',
         emailAddress:       d.email        || 'email@example.com',
         companyWebsiteLink: 'spatialedge.ai',
         imageBase:          API_BASE || window.location.origin,
