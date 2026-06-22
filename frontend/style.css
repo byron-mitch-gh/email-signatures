@@ -699,6 +699,7 @@ select option {
     min-width: 460px;
     max-width: 680px;
     overflow: hidden;
+    padding: 0;
 }
 
 .modal-icon {
